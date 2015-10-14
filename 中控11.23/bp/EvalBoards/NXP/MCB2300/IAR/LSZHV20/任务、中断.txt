@@ -1,0 +1,144 @@
+任务统计
+1.TASK_START              for (;;); 
+2.TASK_UART               p=(uint8 *)OSQPend(QXCOM_rev,0,&err);                 err=OSQPost(QXCOM_rev,(void *) p);
+3.TASK_UART0Send          p=(uint8 *)OSQPend(XCOM_PORT[0].Q_send,0,&err);       err=OSQPost(XCOM_PORT[Port].Q_send,(void *) p);
+4.TASK_UART1Send          p=(uint8 *)OSQPend(XCOM_PORT[1].Q_send,0,&err);
+5.TASK_UART2Send          p=(uint8 *)OSQPend(XCOM_PORT[2].Q_send,0,&err);
+6.TASK_UART3Send          p=(uint8 *)OSQPend(XCOM_PORT[3].Q_send,0,&err);
+7.TASK_UART4Send          p=(uint8 *)OSQPend(XCOM_PORT[4].Q_send,0,&err);
+8.TASK_UART5Send          p=(uint8 *)OSQPend(XCOM_PORT[5].Q_send,0,&err);
+9.TASK_UART8Send          p=(uint8 *)OSQPend(XCOM_PORT[7].Q_send,0,&err);
+10.TASK_UART9Send         p=(uint8 *)OSQPend(XCOM_PORT[8].Q_send,0,&err);
+
+File_Table_Write();
+On_MSG_OPTION_FILE_SEND; 文件传送
+
+
+9.TASK_RUN                for (;;){OSSemPend(FRun,0,&err);  ........}           RealTime_IRQ -> Run_Send_Flag(); -> OSSemPost(FRun);
+
+User_Option()             pdata=(uint8 *)OSQPend(MSG_PQ,0,&err);                err=OSQPost(MSG_PQ, p);
+
+XCOM_init()
+
+中断统计
+1.Ethernet_ReceivePacket    8
+2.Timer2_Exception          14        OSTimeTick();
+3.DMAHandler                1
+4.I2C0_Exception            9
+5.I2C1_Exception            10
+6.EINT3_Exception           12
+7.Timer3_Exception          13
+8.RealTime_IRQ              2         OSSemPost()
+9.UART0_Exception           3         OSSemPost()
+10.UART1_Exception          4         OSSemPost()
+11.UART2_Exception          5         OSSemPost()
+12.UART3_Exception          6         OSSemPost()
+13.EINT1_Exception          7         OSSemPost()
+14.EINT2_Exception          11        OSSemPost()
+
+
+PINSEL0=0xc055555f=11000000010101010101010101011111
+0.15 11  SCK spi扩展串口
+0.14 00  GPIO//没有
+0.13 00  GPIO//没有
+0.12 00  GPIO//没有
+0.11 01  RXD2 com2
+0.10 01  TXD2 com2
+0.9 01  I2STX_SDA  10 MOSI1//spi1
+0.8 01  I2STX_WS   10 MISO1//spi1
+0.7 01  I2STX_CLK  10 SCK1//spi1
+0.6 01  I2SRX_SDA  10 SSEL1//spi1
+0.5 01  I2SRX_WS//空
+0.4 01  I2SRX_CLK//空
+0.3 01  RXD0  COM0
+0.2 01  TXD0  COM0
+0.1 11  SCL1
+0.0 11  SDA1
+
+PINSEL1=0x0145403c=00000001010001010100000000111100
+P0
+31 00 GPIO//没有
+30 00 GPIO//空
+29 00 GPIO//空
+28 01 SCL0//空
+27 01 SDA0//空
+26 00 GPIO  XPWR_CTL
+25 01 AD0.2// 空
+24 01 AD0.1// 空
+23 01 AD0.0// 空
+22 00 GPIO  DEVICE_IO
+21 00 GPIO  GRESET_IO
+20 00 GPIO//空
+19 00 GPIO  POWER_DOG
+18 11 MOSI  spi扩展串口
+17 11 MISO  spi扩展串口
+16 00 GPIO//空
+
+PINSEL2=0x50150105=01010000000101010000000100000101
+P1
+15 01  ENET_REF_CLK
+14 01  ENET_RX_ER 
+13 00  保留//没有
+12 00  保留//没有
+11 00  保留//没有
+10 01  ENET_RXD1
+1.9 01 ENET_RXD0
+1.8 01 ENET_CRS
+1.7 00 保留//没有
+1.6 00 保留//没有
+1.5 00 保留//没有
+1.4 01 ENET_TX_EN
+1.3 00 保留//没有
+1.2 00 保留//没有
+1.1 01 ENET_TXD1 
+1.0 01 ENET_TXD0
+
+PINSEL3=0x00cc0005=00000000110011000000000000000101
+PINSEL3=0x00c00005=00000000110000000000000000000101
+P1= 
+31 00 GPIO//空
+30 00 GPIO   BJ_CTRL1
+29 00 GPIO   LOAD_DEFAULT
+28 00 GPIO//空
+27 11 CAP0.1//空
+26 00 GPIO  DQ_18B20
+25 11 MAT1 . 1                        // UPDATE GPIO 00
+24 00 GPIO//空
+23 00 GPIO//空
+22 00 GPIO  COM2_3_CS
+21 00 GPIO  COM7_8_CS
+20 00 GPIO//空
+19 00 GPIO//空
+18 00 GPIO CDY_CTRL2
+17 01 ENET_MDIO
+16 01 ENET_MDC
+
+PINSEL4=0x0040000a=00000000010000000000000000001010
+PINSEL4=0x0140000a=00000001010000000000000000001010
+P2=
+15 00 保留
+14 00 保留
+13 00 GPIO  CDY_CTRL1
+12 00 GPIO  COM7_8_IRQ              // EINT2 01
+11 01 EINT1 COM2_3_IRQ
+10 00 GPIO  ARM1_LED
+9 00  GPIO//空
+8 00  GPIO  POWER1
+7 00  GPIO//空
+6 00  GPIO  ARM_IN7
+5 00  GPIO//空
+4 00  GPIO//空
+3 00  GPIO//空
+2 00  GPIO//空
+1 10  RXD1  com1
+0 10  TXD1  com1
+
+PINSEL7=0x0=000000
+P3.16~31 保留/GPIO
+
+PINSEL9=0x0f000000=
+P4.29 RXD3 com3
+P4.28 TXD3 com3
+
+PINSEL10=0;//禁止ETM
+
